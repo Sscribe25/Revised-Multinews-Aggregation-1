@@ -2372,6 +2372,65 @@
     </div>
   </footer>
 
+<script>
+document.querySelectorAll("iframe").forEach((frame) => {
+  const originalSrc = frame.src;
+
+  // Only apply to non‑YouTube embeds
+  if (!originalSrc.includes("youtube.com")) {
+    frame.addEventListener("error", () => {
+      const parent = frame.closest(".embed-card");
+
+      // Look for a YouTube fallback stored in data-youtube
+      const yt = frame.dataset.youtube;
+
+      if (yt) {
+        frame.src = yt;
+      } else {
+        // If no YouTube fallback, collapse the iframe
+        frame.style.display = "none";
+
+        // Show fallback links if they exist
+        const fallback = parent.querySelector(".fallback-links");
+        if (fallback) fallback.style.display = "flex";
+      }
+    });
+  }
+});
+</script>
+
+<script>
+document.querySelectorAll("iframe").forEach((frame) => {
+  const originalSrc = frame.src;
+
+  // Only apply to non‑YouTube embeds
+  if (!originalSrc.includes("youtube.com")) {
+    frame.addEventListener("error", () => {
+      const parent = frame.closest(".embed-card");
+
+      // If a mirror is defined, use it
+      const mirror = frame.dataset.mirror;
+      if (mirror) {
+        frame.src = mirror;
+        return;
+      }
+
+      // Otherwise fallback to YouTube auto-switch logic
+      const yt = frame.dataset.youtube;
+      if (yt) {
+        frame.src = yt;
+        return;
+      }
+
+      // Otherwise hide iframe and show fallback links
+      frame.style.display = "none";
+      const fallback = parent.querySelector(".fallback-links");
+      if (fallback) fallback.style.display = "flex";
+    });
+  }
+});
+</script>
+
 </body>
 </html>
 
