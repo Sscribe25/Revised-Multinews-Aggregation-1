@@ -2431,6 +2431,42 @@ document.querySelectorAll("iframe").forEach((frame) => {
 });
 </script>
 
+<script>
+async function loadFallbackRegistry() {
+  const response = await fetch("./fallbacks.json");
+  return response.json();
+}
+
+loadFallbackRegistry().then((registry) => {
+  document.querySelectorAll("iframe[data-id]").forEach((frame) => {
+    const id = frame.dataset.id;
+    const entry = registry[id];
+    if (!entry) return;
+
+    const parent = frame.closest(".embed-card");
+
+    frame.addEventListener("error", () => {
+      // 1. Try mirror
+      if (entry.mirror) {
+        frame.src = entry.mirror;
+        return;
+      }
+
+      // 2. Try YouTube
+      if (entry.youtube) {
+        frame.src = entry.youtube;
+        return;
+      }
+
+      // 3. Show fallback buttons
+      frame.style.display = "none";
+      const fallback = parent.querySelector(".fallback-links");
+      if (fallback) fallback.style.display = "flex";
+    });
+  });
+});
+</script>
+
 </body>
 </html>
 

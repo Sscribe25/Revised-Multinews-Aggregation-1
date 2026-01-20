@@ -1,0 +1,62 @@
+{
+  "tagesschau": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=UC5NOEUbkLheQcaaRldYW5GA",
+    "mirror": "https://www.tagesschau.de/multimedia/livestreams/livestream1.html",
+    "official": "https://www.tagesschau.de/"
+  },
+  "dw": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=UCknLrEdhRCp1aegoMqRaCZg",
+    "mirror": null,
+    "official": "https://www.dw.com/"
+  },
+  "cbc": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=UCuFFtHWoLl5fauMMD5Ww2jA",
+    "mirror": null,
+    "official": "https://www.cbc.ca/news"
+  },
+  "globalnews": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=UChLtXXpo4Ge1ReTEboVvTDg",
+    "mirror": null,
+    "official": "https://globalnews.ca/"
+  },
+  "rte": {
+    "youtube": "https://www.youtube.com/embed/videoseries?list=PLRTENews",
+    "mirror": null,
+    "official": "https://www.rte.ie/news/"
+  },
+  "virginmedia": {
+    "youtube": "https://www.youtube.com/embed/videoseries?list=PLVirginMediaNews",
+    "mirror": null,
+    "official": "https://www.virginmediatelevision.ie/shows/virginmedianews"
+  },
+  "arte": {
+    "youtube": "https://www.youtube.com/embed/videoseries?list=PLArteNews",
+    "mirror": null,
+    "official": "https://www.arte.tv/"
+  },
+  "c5n": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=UC2QXKjvZ2S6a6UQpFf0ziWQ",
+    "mirror": null,
+    "official": "https://www.c5n.com/"
+  },
+  "cronica": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=UC7QYxgDHuZ2J1BGVxJrYj7Q",
+    "mirror": null,
+    "official": "https://www.cronica.com.ar/"
+  },
+  "tn": {
+    "youtube": "https://www.youtube.com/embed/videoseries?list=PLTNnews",
+    "mirror": null,
+    "official": "https://tn.com.ar/"
+  },
+  "televisa": {
+    "youtube": "https://www.youtube.com/embed/videoseries?list=PLTelevisaChihuahua",
+    "mirror": null,
+    "official": "https://noticias.televisa.com/estados/chihuahua/"
+  },
+  "univision26": {
+    "youtube": "https://www.youtube.com/embed/videoseries?list=PLUnivision26",
+    "mirror": null,
+    "official": "https://www.univision.com/local/el-paso-kint"
+  }
+}
