@@ -2467,6 +2467,62 @@ loadFallbackRegistry().then((registry) => {
 });
 </script>
 
+<script>
+document.querySelectorAll("a.btn-link").forEach((a) => {
+  if (a.hasAttribute("target")) a.removeAttribute("target");
+  if (a.hasAttribute("rel")) a.removeAttribute("rel");
+});
+</script>
+
+<script>
+document.querySelectorAll("iframe").forEach((frame) => {
+  if (!frame.dataset.id) {
+    try {
+      const url = new URL(frame.src);
+      const host = url.hostname.replace("www.", "");
+      const id = host.split(".")[0];
+      frame.dataset.id = id;
+    } catch (e) {}
+  }
+});
+</script>
+
+<script>
+async function loadFallbackRegistry() {
+  const response = await fetch("./fallbacks.json");
+  return response.json();
+}
+
+loadFallbackRegistry().then((registry) => {
+  document.querySelectorAll("iframe[data-id]").forEach((frame) => {
+    const id = frame.dataset.id;
+    const entry = registry[id];
+    if (!entry) return;
+
+    const parent = frame.closest(".embed-card");
+
+    frame.addEventListener("error", () => {
+      // 1. Mirror fallback
+      if (entry.mirror) {
+        frame.src = entry.mirror;
+        return;
+      }
+
+      // 2. YouTube fallback
+      if (entry.youtube) {
+        frame.src = entry.youtube;
+        return;
+      }
+
+      // 3. Fallback buttons
+      frame.style.display = "none";
+      const fallback = parent.querySelector(".fallback-links");
+      if (fallback) fallback.style.display = "flex";
+    });
+  });
+});
+</script>
+
 </body>
 </html>
 
