@@ -1,22 +1,29 @@
-const CACHE_NAME = 'newsgrid-live-v1';
-const OFFLINE_URLS = [
-  './',
-  './index.html',
-  './manifest.json'
+const CACHE_NAME = "newsgrid-cache-v1";
+
+const URLS_TO_CACHE = [
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png"
 ];
 
-self.addEventListener('install', event => {
+// Install: pre-cache core shell
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(OFFLINE_URLS))
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(URLS_TO_CACHE);
+    })
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+// Activate: clean old caches
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then(keys =>
+    caches.keys().then((keys) =>
       Promise.all(
-        keys.map(key => {
+        keys.map((key) => {
           if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
@@ -27,20 +34,41 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
-  const req = event.request;
+// Fetch: network-first for HTML, cache-first for everything else
+self.addEventListener("fetch", (event) => {
+  const request = event.request;
 
   // Only handle GET
-  if (req.method !== 'GET') return;
+  if (request.method !== "GET") return;
 
-  event.respondWith(
-    caches.match(req).then(cached => {
-      if (cached) return cached;
-      return fetch(req).catch(() => {
-        if (req.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
-    })
-  );
+  const isHTML =
+    request.headers.get("accept") &&
+    request.headers.get("accept").includes("text/html");
+
+  if (isHTML) {
+    // Network-first for HTML
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          return response;
+        })
+        .catch(() =>
+          caches.match(request).then((cached) => cached || caches.match("./index.html"))
+        )
+    );
+  } else {
+    // Cache-first for static assets
+    event.respondWith(
+      caches.match(request).then((cached) => {
+        if (cached) return cached;
+        return fetch(request).then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          return response;
+        });
+      })
+    );
+  }
 });

@@ -1,10 +1,13 @@
 {
   "name": "Newsgrid Live MultiAggregation",
-  "short_name": "Newsgrid Live",
-  "start_url": "./",
+  "short_name": "Newsgrid",
+  "description": "Sovereign multilingual political news dashboard with hybrid video embeds, text panels, and official-site fallbacks.",
+  "start_url": "index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#020617",
-  "theme_color": "#020617",
+  "orientation": "landscape",
+  "background_color": "#0d0817",
+  "theme_color": "#0d0817",
   "icons": [
     {
       "src": "icons/icon-192.png",

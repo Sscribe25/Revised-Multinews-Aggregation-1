@@ -5,109 +5,149 @@
   <title>Newsgrid Live MultiAggregation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#020617">
+  <meta name="theme-color" content="#0d0817">
   <style>
     :root {
-      color-scheme: dark light;
-      --bg: #020617;
-      --fg: #e5e7eb;
-      --accent: #38bdf8;
-      --card: #020617;
-      --border: #1f2937;
-      --muted: #9ca3af;
-      --embed-bg: #020617;
-      --text-panel-bg: #020617;
+      color-scheme: dark;
+      --bg-top: #0d0817;        /* deep purple (top) */
+      --bg-bottom: #1a1028;     /* deeper purple (bottom) */
+      --fg: #eae6ff;            /* soft periwinkle text */
+      --fg-muted: #b6b0e6;      /* muted lavender */
+      --accent: #c3c7ff;        /* periwinkle accent */
+      --accent-strong: #ff6fae; /* reddish-pink highlight */
+      --card-bg: #140b22;       /* card background */
+      --border: #7f84d9;        /* periwinkle border */
+      --border-soft: #4f4a86;   /* softer border */
+      --embed-bg: #0f071b;      /* embed area background */
+      --text-panel-bg: #120a20; /* text panel background */
+      --chip-bg: #1f1433;       /* pill/button background */
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #020617 0, #000000 55%);
+      background: linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
       color: var(--fg);
       line-height: 1.5;
     }
+
     header {
-      padding: 1.25rem 1.5rem 0.75rem;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
-      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(2,6,23,0.98));
+      padding: 1.25rem 1.5rem 0.9rem;
+      border-bottom: 1px solid var(--border-soft);
+      backdrop-filter: blur(14px);
+      background: linear-gradient(
+        to bottom,
+        rgba(13, 8, 23, 0.96),
+        rgba(20, 11, 34, 0.98)
+      );
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
     }
+
     h1 {
-      margin: 0 0 0.25rem;
-      font-size: 1.5rem;
-      letter-spacing: 0.03em;
+      margin: 0 0 0.3rem;
+      font-size: 1.55rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
     }
+
     header p {
       margin: 0;
-      color: var(--muted);
-      font-size: 0.85rem;
+      color: var(--fg-muted);
+      font-size: 0.86rem;
     }
+
+    .header-subline {
+      margin-top: 0.25rem;
+      font-size: 0.78rem;
+      color: var(--fg-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
     main {
       padding: 1.25rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.1rem;
     }
+
     section {
-      background: radial-gradient(circle at top left, #020617 0, #020617 55%);
-      border-radius: 0.9rem;
-      border: 1px solid var(--border);
-      padding: 0.9rem 0.9rem 0.75rem;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+      background: radial-gradient(circle at top, #1b102f 0, #120a20 55%, #0d0817 100%);
+      border-radius: 0.95rem;
+      border: 1px solid var(--border-soft);
+      padding: 0.9rem 0.9rem 0.8rem;
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(195, 199, 255, 0.04);
     }
+
     h2 {
-      margin: 0 0 0.15rem;
+      margin: 0 0 0.2rem;
       font-size: 1.05rem;
       display: flex;
       justify-content: space-between;
       align-items: baseline;
+      color: var(--fg);
     }
+
     .region-code {
       font-size: 0.75rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-    .region-meta {
-      margin: 0 0 0.6rem;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-    h3 {
-      margin: 0.6rem 0 0.25rem;
-      font-size: 0.9rem;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.16em;
     }
+
+    .region-meta {
+      margin: 0 0 0.6rem;
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+    }
+
+    h3 {
+      margin: 0.6rem 0 0.3rem;
+      font-size: 0.9rem;
+      color: var(--accent-strong);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
     .embed-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 0.5rem;
+      gap: 0.55rem;
     }
+
     .embed-card {
       background: var(--embed-bg);
-      border-radius: 0.6rem;
+      border-radius: 0.7rem;
       border: 1px solid var(--border);
       overflow: hidden;
     }
+
     .embed-label {
-      padding: 0.35rem 0.55rem;
-      font-size: 0.78rem;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      border-bottom: 1px solid var(--border-soft);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .embed-label span {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
+      color: var(--accent);
     }
+
     iframe {
       width: 100%;
       aspect-ratio: 16 / 9;
@@ -115,43 +155,51 @@
       display: block;
       background: #000;
     }
+
     .fallback-links {
-      padding: 0.35rem 0.55rem 0.5rem;
-      border-top: 1px solid var(--border);
+      padding: 0.35rem 0.6rem 0.55rem;
+      border-top: 1px solid var(--border-soft);
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
     }
+
     .btn-link {
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
-      padding: 0.25rem 0.55rem;
+      padding: 0.25rem 0.7rem;
       border-radius: 999px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-soft);
       color: var(--fg);
       text-decoration: none;
       font-size: 0.78rem;
-      background: rgba(15,23,42,0.9);
+      background: var(--chip-bg);
+      box-shadow: 0 0 0 1px rgba(195, 199, 255, 0.08);
     }
+
     .btn-link span {
       font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
+      letter-spacing: 0.1em;
+      color: var(--fg-muted);
     }
+
     .btn-link:hover {
-      border-color: var(--accent);
-      color: var(--accent);
+      border-color: var(--accent-strong);
+      color: var(--accent-strong);
+      box-shadow: 0 0 0 1px rgba(255, 111, 174, 0.4);
     }
+
     details {
-      margin-top: 0.4rem;
+      margin-top: 0.45rem;
       background: var(--text-panel-bg);
-      border-radius: 0.6rem;
-      border: 1px solid var(--border);
-      padding: 0.35rem 0.55rem 0.45rem;
+      border-radius: 0.7rem;
+      border: 1px solid var(--border-soft);
+      padding: 0.4rem 0.6rem 0.5rem;
       font-size: 0.8rem;
     }
+
     details summary {
       cursor: pointer;
       list-style: none;
@@ -159,52 +207,86 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: var(--muted);
+      color: var(--fg-muted);
     }
+
     details summary::-webkit-details-marker {
       display: none;
     }
+
     .summary-label {
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      font-size: 0.76rem;
+      color: var(--accent);
     }
+
     .summary-region {
-      font-size: 0.7rem;
-      color: var(--muted);
+      font-size: 0.72rem;
+      color: var(--fg-muted);
     }
+
     .text-links {
-      margin-top: 0.4rem;
+      margin-top: 0.45rem;
       padding-left: 0.1rem;
     }
+
     .text-links a {
       display: block;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--fg);
       text-decoration: none;
       margin: 0.12rem 0;
     }
+
     .text-links a:hover {
-      color: var(--accent);
+      color: var(--accent-strong);
     }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(195, 199, 255, 0.4);
+      background: rgba(20, 11, 34, 0.9);
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-tag-dot {
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 999px;
+      background: var(--accent-strong);
+      box-shadow: 0 0 8px rgba(255, 111, 174, 0.7);
+    }
+
     footer {
-      padding: 0.75rem 1.5rem 1.1rem;
-      border-top: 1px solid var(--border);
-      font-size: 0.78rem;
-      color: var(--muted);
-      background: #020617;
+      padding: 0.8rem 1.5rem 1.2rem;
+      border-top: 1px solid var(--border-soft);
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      background: #0d0817;
     }
+
     .hint {
       margin-top: 0.35rem;
       font-size: 0.76rem;
-      color: var(--muted);
+      color: var(--fg-muted);
     }
-    @media (max-width: 640px) {
+
+    @media (max-width: 720px) {
       header {
         position: static;
       }
       main {
         padding: 0.9rem;
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -219,433 +301,2077 @@
 <body>
   <header>
     <h1>Newsgrid Live MultiAggregation</h1>
-    <p>FR‑FR · DE‑DE · FR‑CA · ES‑MX · EN‑GB — hybrid infinite‑scroll video feeds + expandable text news panels.</p>
+    <p>Regional political video feeds + textual news panels, arranged FR‑FR · DE‑DE · FR‑CA · ES‑MX · EN‑GB → International.</p>
+    <div class="header-subline">
+      Hybrid YouTube embeds · official-site attempts · in-page text panels · minimal noise · Rainmeter & PWA ready
+    </div>
   </header>
 
   <main>
-    <!-- FR-FR -->
-    <section>
-      <h2>
-        France
-        <span class="region-code">FR‑FR</span>
-      </h2>
-      <p class="region-meta">French · France, EU, international politics · Hybrid: proxy video feeds + text news.</p>
+    <!-- PARTS 2–8 GO HERE:
+         - France (FR‑FR)
+         - Germany (DE‑DE)
+         - Québec / Canada (FR‑CA)
+         - Mexico (ES‑MX)
+         - United Kingdom (EN‑GB)
+         - International
+         - Official Sites / Government Feeds
+    -->
+<!-- ========================= -->
+<!--   FRANCE (FR‑FR) SECTION   -->
+<!-- ========================= -->
 
-      <h3>Video feeds (proxy embeds + fallback)</h3>
-      <div class="embed-grid">
-        <!-- France 24 FR (YouTube channel via proxy) -->
-        <div class="embed-card">
-          <div class="embed-label">
-            France 24 (FR)
-            <span>live / intl</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCQfwfsi5VrQ8yKZ-UWmAEFg"
-            title="France 24 FR feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@FRANCE24" target="_blank" rel="noopener noreferrer">
-              Open France 24 on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    France · FR‑FR
+  </div>
 
-        <!-- Arte (FR) -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Arte Info (FR)
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCwI-JbGNsojUNJ4v5U8Kf5w"
-            title="Arte Info FR feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@ARTE" target="_blank" rel="noopener noreferrer">
-              Open Arte on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
+  <h2>
+    France
+    <span class="region-code">FR‑FR</span>
+  </h2>
 
-        <!-- TV5Monde Info -->
-        <div class="embed-card">
-          <div class="embed-label">
-            TV5Monde Info
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UC2C_jShtL725hvbm1arSV9w"
-            title="TV5Monde Info feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@TV5MONDEInfo" target="_blank" rel="noopener noreferrer">
-              Open TV5Monde Info on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
+  <p class="region-meta">
+    French political news · France, EU, global affairs · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- France 24 FR -->
+    <div class="embed-card">
+      <div class="embed-label">
+        France 24 (FR)
+        <span>live</span>
       </div>
-
-      <h3>Text news (expand in place)</h3>
-      <details>
-        <summary>
-          <span class="summary-label">Text sources · France</span>
-          <span class="summary-region">click to expand</span>
-        </summary>
-        <div class="text-links">
-          <a href="https://www.lemonde.fr/politique/" target="_self">Le Monde · Politique</a>
-          <a href="https://www.lefigaro.fr/politique" target="_self">Le Figaro · Politique</a>
-          <a href="https://www.humanite.fr/politique" target="_self">L’Humanité · Politique</a>
-          <a href="https://www.liberation.fr/politique/" target="_self">Libération · Politique</a>
-        </div>
-      </details>
-    </section>
-
-    <!-- DE-DE -->
-    <section>
-      <h2>
-        Germany
-        <span class="region-code">DE‑DE</span>
-      </h2>
-      <p class="region-meta">German · Bundestag, EU, global affairs · Public broadcasters + party‑adjacent ecosystem.</p>
-
-      <h3>Video feeds (proxy embeds + fallback)</h3>
-      <div class="embed-grid">
-        <!-- DW Deutsch -->
-        <div class="embed-card">
-          <div class="embed-label">
-            DW Deutsch
-            <span>intl</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCknLrEdhRCp1aegoMqRaCZg"
-            title="DW Deutsch feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@dwdeutsch" target="_blank" rel="noopener noreferrer">
-              Open DW Deutsch on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Tagesschau -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Tagesschau
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UC5NOEUbkLheQcaaRldYW5GA"
-            title="Tagesschau feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@tagesschau" target="_blank" rel="noopener noreferrer">
-              Open Tagesschau on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- ZDF heute -->
-        <div class="embed-card">
-          <div class="embed-label">
-            ZDF heute
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UC5X4e8N4m8k9kVxwYwQpK5Q"
-            title="ZDF heute feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@zdfheute" target="_blank" rel="noopener noreferrer">
-              Open ZDF heute on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        title="France 24 FR Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.france24.com/fr/" target="_blank" rel="noopener noreferrer">
+          France 24 · Site <span>fallback</span>
+        </a>
       </div>
+    </div>
 
-      <h3>Text news (expand in place)</h3>
-      <details>
-        <summary>
-          <span class="summary-label">Text sources · Germany</span>
-          <span class="summary-region">click to expand</span>
-        </summary>
-        <div class="text-links">
-          <a href="https://www.tagesschau.de/" target="_self">Tagesschau · Startseite</a>
-          <a href="https://www.zeit.de/politik/index" target="_self">Die Zeit · Politik</a>
-          <a href="https://www.sueddeutsche.de/politik" target="_self">Süddeutsche Zeitung · Politik</a>
-          <a href="https://www.faz.net/aktuell/politik" target="_self">FAZ · Politik</a>
-        </div>
-      </details>
-    </section>
-
-    <!-- FR-CA -->
-    <section>
-      <h2>
-        Canada (Québec)
-        <span class="region-code">FR‑CA</span>
-      </h2>
-      <p class="region-meta">French (Québec) · Federal & provincial politics · Clips + text‑heavy sources.</p>
-
-      <h3>Video feeds (proxy embeds + fallback)</h3>
-      <div class="embed-grid">
-        <!-- Radio-Canada Info (YouTube) -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Radio‑Canada Info
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCi7Zk9baY1tvdlgxIML8MXg"
-            title="Radio-Canada Info feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@RadioCanadaInfo" target="_blank" rel="noopener noreferrer">
-              Open Radio‑Canada Info on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- TVA Nouvelles (YouTube) -->
-        <div class="embed-card">
-          <div class="embed-label">
-            TVA Nouvelles
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCQWvQv0LZkq2UTWyUe0yqVg"
-            title="TVA Nouvelles feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@tvanouvelles" target="_blank" rel="noopener noreferrer">
-              Open TVA Nouvelles on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Noovo Info (YouTube) -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Noovo Info
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UC0p8n_jl16rDpDVuPEw24kQ"
-            title="Noovo Info feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@noovoinfo" target="_blank" rel="noopener noreferrer">
-              Open Noovo Info on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
+    <!-- Arte Info -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Arte Info
+        <span>clips</span>
       </div>
-
-      <h3>Text news (expand in place)</h3>
-      <details>
-        <summary>
-          <span class="summary-label">Text sources · Québec / Canada</span>
-          <span class="summary-region">click to expand</span>
-        </summary>
-        <div class="text-links">
-          <a href="https://ici.radio-canada.ca/info" target="_self">Radio‑Canada · Info</a>
-          <a href="https://www.tvanouvelles.ca/" target="_self">TVA Nouvelles · Accueil</a>
-          <a href="https://www.noovo.info/" target="_self">Noovo Info · Accueil</a>
-          <a href="https://www.ledevoir.com/politique" target="_self">Le Devoir · Politique</a>
-          <a href="https://www.journaldemontreal.com/politique" target="_self">Journal de Montréal · Politique</a>
-        </div>
-      </details>
-    </section>
-
-    <!-- ES-MX -->
-    <section>
-      <h2>
-        Mexico
-        <span class="region-code">ES‑MX</span>
-      </h2>
-      <p class="region-meta">Spanish · Mexican politics, Latin America · Independent + mainstream feeds.</p>
-
-      <h3>Video feeds (proxy embeds + fallback)</h3>
-      <div class="embed-grid">
-        <!-- Aristegui Noticias -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Aristegui Noticias
-            <span>independent</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UC3Q8O3Bh2Le8Rj1-Q-_UUbA"
-            title="Aristegui Noticias feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@AristeguiNoticias" target="_blank" rel="noopener noreferrer">
-              Open Aristegui on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Milenio TV -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Milenio TV
-            <span>live / clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCFxHplbcoJK9m70c4VyTIxg"
-            title="Milenio TV feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@MILENIO" target="_blank" rel="noopener noreferrer">
-              Open Milenio on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Once Noticias -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Once Noticias
-            <span>public</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCtQhGk9wQv1iQKcPqJ3W4VQ"
-            title="Once Noticias feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@OnceNoticias" target="_blank" rel="noopener noreferrer">
-              Open Once Noticias on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLp5kY1lJdZl0pQfM9vDOMkMt2rt7NmBGG"
+        title="Arte Info Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.arte.tv/fr/" target="_blank" rel="noopener noreferrer">
+          Arte · Site <span>fallback</span>
+        </a>
       </div>
+    </div>
 
-      <h3>Text news (expand in place)</h3>
-      <details>
-        <summary>
-          <span class="summary-label">Text sources · Mexico</span>
-          <span class="summary-region">click to expand</span>
-        </summary>
-        <div class="text-links">
-          <a href="https://aristeguinoticias.com/" target="_self">Aristegui Noticias · Portada</a>
-          <a href="https://www.milenio.com/politica" target="_self">Milenio · Política</a>
-          <a href="https://www.jornada.com.mx/politica" target="_self">La Jornada · Política</a>
-          <a href="https://www.elfinanciero.com.mx/nacional/" target="_self">El Financiero · Nacional</a>
-        </div>
-      </details>
-    </section>
-
-    <!-- EN-GB -->
-    <section>
-      <h2>
-        United Kingdom
-        <span class="region-code">EN‑GB</span>
-      </h2>
-      <p class="region-meta">English · Westminster, Europe, global politics · Public + commercial feeds.</p>
-
-      <h3>Video feeds (proxy embeds + fallback)</h3>
-      <div class="embed-grid">
-        <!-- BBC News -->
-        <div class="embed-card">
-          <div class="embed-label">
-            BBC News
-            <span>clips / live</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UC16niRr50-MSBwiO3YDb3RA"
-            title="BBC News feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@BBCNews" target="_blank" rel="noopener noreferrer">
-              Open BBC News on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Sky News -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Sky News
-            <span>live</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCoMdktPbSTixAyNGwb-UYkQ"
-            title="Sky News feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@SkyNews" target="_blank" rel="noopener noreferrer">
-              Open Sky News on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Channel 4 News -->
-        <div class="embed-card">
-          <div class="embed-label">
-            Channel 4 News
-            <span>clips</span>
-          </div>
-          <iframe
-            src="https://piped.video/channel/UCTrQ7HXWRRxr7OsOtodr2_w"
-            title="Channel 4 News feed"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-          <div class="fallback-links">
-            <a class="btn-link" href="https://www.youtube.com/@Channel4News" target="_blank" rel="noopener noreferrer">
-              Open Channel 4 News on YouTube <span>fallback</span>
-            </a>
-          </div>
-        </div>
+    <!-- TV5Monde Info -->
+    <div class="embed-card">
+      <div class="embed-label">
+        TV5Monde Info
+        <span>clips</span>
       </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLtv5info"
+        title="TV5Monde Info Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://information.tv5monde.com/" target="_blank" rel="noopener noreferrer">
+          TV5Monde Info · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
 
-      <h3>Text news (expand in place)</h3>
-      <details>
-        <summary>
-          <span class="summary-label">Text sources · UK</span>
-          <span class="summary-region">click to expand</span>
-        </summary>
-        <div class="text-links">
-          <a href="https://www.bbc.co.uk/news/politics" target="_self">BBC News · Politics</a>
-          <a href="https://news.sky.com/politics" target="_self">Sky News · Politics</a>
-          <a href="https://www.theguardian.com/politics" target="_self">The Guardian · Politics</a>
-          <a href="https://www.telegraph.co.uk/politics/" target="_self">The Telegraph · Politics</a>
-          <a href="https://www.channel4.com/news/politics" target="_self">Channel 4 News · Politics</a>
-        </div>
-      </details>
-    </section>
+    <!-- Euronews FR -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Euronews (FR)
+        <span>live / clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCFzJjgVicCtFxJ5B0P_ei8A"
+        title="Euronews FR Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://fr.euronews.com/" target="_blank" rel="noopener noreferrer">
+          Euronews FR · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">French Political News</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://www.lemonde.fr/politique/" target="_self">Le Monde · Politique</a>
+      <a href="https://www.lefigaro.fr/politique" target="_self">Le Figaro · Politique</a>
+      <a href="https://www.liberation.fr/politique/" target="_self">Libération · Politique</a>
+      <a href="https://www.humanite.fr/politique" target="_self">L’Humanité · Politique</a>
+      <a href="https://www.francetvinfo.fr/politique/" target="_self">FranceTV Info · Politique</a>
+      <a href="https://www.bfmtv.com/politique/" target="_self">BFMTV · Politique</a>
+      <a href="https://www.franceinter.fr/politique" target="_self">France Inter · Politique</a>
+      <a href="https://www.rfi.fr/fr/podcasts/politique" target="_self">RFI · Politique</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+    <a class="btn-link" href="https://www.franceinfo.fr/" target="_blank" rel="noopener noreferrer">
+      France Info <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.mediapart.fr/" target="_blank" rel="noopener noreferrer">
+      Mediapart <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.challenges.fr/politique/" target="_blank" rel="noopener noreferrer">
+      Challenges · Politique <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.lexpress.fr/politique/" target="_blank" rel="noopener noreferrer">
+      L’Express · Politique <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.slate.fr/politique" target="_blank" rel="noopener noreferrer">
+      Slate FR · Politique <span>open</span>
+    </a>
+  </div>
+
+</section>
+
+<!-- ========================= -->
+<!--   GERMANY (DE‑DE) SECTION -->
+<!-- ========================= -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    Germany · DE‑DE
+  </div>
+
+  <h2>
+    Germany
+    <span class="region-code">DE‑DE</span>
+  </h2>
+
+  <p class="region-meta">
+    German political news · Bundestag, EU, global affairs · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- DW Deutsch -->
+    <div class="embed-card">
+      <div class="embed-label">
+        DW Deutsch
+        <span>live / intl</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCknLrEdhRCp1aegoMqRaCZg"
+        title="DW Deutsch Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.dw.com/de" target="_blank" rel="noopener noreferrer">
+          DW Deutsch · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tagesschau Playlist -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Tagesschau
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PL8B3F8C7F7F3F5F5F"
+        title="Tagesschau Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.tagesschau.de/" target="_blank" rel="noopener noreferrer">
+          Tagesschau.de <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ZDF Heute Playlist -->
+    <div class="embed-card">
+      <div class="embed-label">
+        ZDF heute
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PL6E6C7F7F7F7F7F7"
+        title="ZDF Heute Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.zdf.de/nachrichten" target="_blank" rel="noopener noreferrer">
+          ZDF.de · Nachrichten <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Euronews DE -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Euronews (DE)
+        <span>live / clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCW9rF8jLZp8GkVZxJcJ5z2A"
+        title="Euronews DE Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://de.euronews.com/" target="_blank" rel="noopener noreferrer">
+          Euronews DE · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">German Political News</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://www.tagesschau.de/" target="_self">Tagesschau · Startseite</a>
+      <a href="https://www.zeit.de/politik/index" target="_self">Die Zeit · Politik</a>
+      <a href="https://www.sueddeutsche.de/politik" target="_self">Süddeutsche Zeitung · Politik</a>
+      <a href="https://www.faz.net/aktuell/politik" target="_self">FAZ · Politik</a>
+      <a href="https://www.welt.de/politik/" target="_self">WELT · Politik</a>
+      <a href="https://www.handelsblatt.com/politik" target="_self">Handelsblatt · Politik</a>
+      <a href="https://www.rnd.de/politik/" target="_self">RND · Politik</a>
+      <a href="https://www.dw.com/de/themen/politik/s-9077" target="_self">DW · Politik</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.bundestag.de/" target="_blank" rel="noopener noreferrer">
+      Deutscher Bundestag <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.bundesregierung.de/" target="_blank" rel="noopener noreferrer">
+      Bundesregierung <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.tagesspiegel.de/politik/" target="_blank" rel="noopener noreferrer">
+      Tagesspiegel · Politik <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.n-tv.de/politik/" target="_blank" rel="noopener noreferrer">
+      n‑tv · Politik <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.focus.de/politik/" target="_blank" rel="noopener noreferrer">
+      Focus Online · Politik <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ================================ -->
+<!--   QUÉBEC / CANADA (FR‑CA)       -->
+<!-- ================================ -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    Québec / Canada · FR‑CA
+  </div>
+
+  <h2>
+    Québec / Canada
+    <span class="region-code">FR‑CA</span>
+  </h2>
+
+  <p class="region-meta">
+    Québec and Canadian political news · Federal & provincial affairs · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- Radio-Canada Info (clips) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Radio‑Canada Info
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLK5J7Vj1Z8t0Q8Pz9vywgq6Z9erjRzCQ7"
+        title="Radio-Canada Info Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://ici.radio-canada.ca/info" target="_blank" rel="noopener noreferrer">
+          Radio‑Canada · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- TVA Nouvelles (clips) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        TVA Nouvelles
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLTVAnews"
+        title="TVA Nouvelles Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.tvanouvelles.ca/" target="_blank" rel="noopener noreferrer">
+          TVA Nouvelles · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Noovo Info (clips) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Noovo Info
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLNoovoInfo"
+        title="Noovo Info Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.noovo.info/" target="_blank" rel="noopener noreferrer">
+          Noovo Info · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Global News (Canada) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Global News (CA)
+        <span>live / clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UChLtXXpo4Ge1ReTEboVvTDg"
+        title="Global News Canada Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://globalnews.ca/" target="_blank" rel="noopener noreferrer">
+          Global News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- CBC News (clips) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        CBC News
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLCBCnews"
+        title="CBC News Clips"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.cbc.ca/news" target="_blank" rel="noopener noreferrer">
+          CBC News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- CPAC (Parliament of Canada) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        CPAC (Canada)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCi8e0iOVk1fEOogdfu4YgfA"
+        title="CPAC Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.cpac.ca/" target="_blank" rel="noopener noreferrer">
+          CPAC · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- House of Commons Canada -->
+    <div class="embed-card">
+      <div class="embed-label">
+        House of Commons (Canada)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCxJrnv0HqfJtGqK2y9l9AqA"
+        title="House of Commons Canada Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.ourcommons.ca/" target="_blank" rel="noopener noreferrer">
+          House of Commons · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Senate of Canada -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Senate of Canada
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCi8e0iOVk1fEOogdfu4YgfA"
+        title="Senate of Canada Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://sencanada.ca/" target="_blank" rel="noopener noreferrer">
+          Senate of Canada · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">Québec & Canadian Political News</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://www.ledevoir.com/politique" target="_self">Le Devoir · Politique</a>
+      <a href="https://www.lapresse.ca/actualites/politique/" target="_self">La Presse · Politique</a>
+      <a href="https://www.journaldemontreal.com/politique" target="_self">Journal de Montréal · Politique</a>
+      <a href="https://www.journaldequebec.com/politique" target="_self">Journal de Québec · Politique</a>
+      <a href="https://ici.radio-canada.ca/info/politique" target="_self">Radio‑Canada · Politique</a>
+      <a href="https://www.cbc.ca/news/politics" target="_self">CBC News · Politics</a>
+      <a href="https://globalnews.ca/politics/" target="_self">Global News · Politics</a>
+      <a href="https://www.ctvnews.ca/politics" target="_self">CTV News · Politics</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.quebec.ca/" target="_blank" rel="noopener noreferrer">
+      Gouvernement du Québec <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.canada.ca/en.html" target="_blank" rel="noopener noreferrer">
+      Government of Canada <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.assemblee-nationale.qc.ca/" target="_blank" rel="noopener noreferrer">
+      Assemblée Nationale du Québec <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.electionsquebec.qc.ca/" target="_blank" rel="noopener noreferrer">
+      Élections Québec <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.elections.ca/" target="_blank" rel="noopener noreferrer">
+      Elections Canada <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ========================= -->
+<!--   MEXICO (ES‑MX) SECTION  -->
+<!-- ========================= -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    Mexico · ES‑MX
+  </div>
+
+  <h2>
+    Mexico
+    <span class="region-code">ES‑MX</span>
+  </h2>
+
+  <p class="region-meta">
+    Mexican political news · National + Ciudad Juárez coverage · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- Aristegui Noticias -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Aristegui Noticias
+        <span>independent</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UC3Q8O3Bh2Le8Rj1-Q-_UUbA"
+        title="Aristegui Noticias Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://aristeguinoticias.com/" target="_blank" rel="noopener noreferrer">
+          Aristegui · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Milenio TV -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Milenio TV
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCFxHplbcoJK9m70c4VyTIxg"
+        title="Milenio TV Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.milenio.com/" target="_blank" rel="noopener noreferrer">
+          Milenio · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Once Noticias -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Once Noticias
+        <span>public</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCtQhGk9wQv1iQKcPqJ3W4VQ"
+        title="Once Noticias Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://oncenoticias.digital/" target="_blank" rel="noopener noreferrer">
+          Once Noticias · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Canal 44 Ciudad Juárez -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Canal 44 · Ciudad Juárez
+        <span>local</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCp8i1Cdm42Hcps225y7sYbw"
+        title="Canal 44 Ciudad Juárez Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://canal44.com/" target="_blank" rel="noopener noreferrer">
+          Canal 44 · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Televisa Chihuahua -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Televisa Chihuahua
+        <span>local</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLTelevisaChihuahua"
+        title="Televisa Chihuahua Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://noticias.televisa.com/estados/chihuahua/" target="_blank" rel="noopener noreferrer">
+          Televisa Chihuahua · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Univision 26 El Paso -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Univision 26 · El Paso
+        <span>border region</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLUnivision26"
+        title="Univision 26 El Paso Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.univision.com/local/el-paso-kint" target="_blank" rel="noopener noreferrer">
+          Univision 26 · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">Mexican Political News</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://www.jornada.com.mx/politica" target="_self">La Jornada · Política</a>
+      <a href="https://www.elfinanciero.com.mx/nacional/" target="_self">El Financiero · Nacional</a>
+      <a href="https://www.reforma.com/" target="_self">Reforma · Portada</a>
+      <a href="https://www.excelsior.com.mx/nacional" target="_self">Excélsior · Nacional</a>
+      <a href="https://www.eluniversal.com.mx/nacion" target="_self">El Universal · Nación</a>
+      <a href="https://aristeguinoticias.com/" target="_self">Aristegui Noticias · Portada</a>
+      <a href="https://www.milenio.com/politica" target="_self">Milenio · Política</a>
+      <a href="https://www.animalpolitico.com/" target="_self">Animal Político</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   CIUDAD JUÁREZ PANEL     -->
+  <!-- ========================= -->
+
+  <h3>Ciudad Juárez · Local News</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">Juárez Region Sources</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://diario.mx/" target="_self">El Diario de Juárez</a>
+      <a href="https://nortedigital.mx/" target="_self">Norte Digital</a>
+      <a href="https://canal44.com/" target="_self">Canal 44 · Local</a>
+      <a href="https://www.univision.com/local/el-paso-kint" target="_self">Univision 26 El Paso</a>
+      <a href="https://www.elheraldodejuarez.com.mx/" target="_self">El Heraldo de Juárez</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.gob.mx/" target="_blank" rel="noopener noreferrer">
+      Gobierno de México <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.presidencia.gob.mx/" target="_blank" rel="noopener noreferrer">
+      Presidencia de México <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.senado.gob.mx/" target="_blank" rel="noopener noreferrer">
+      Senado de la República <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.diputados.gob.mx/" target="_blank" rel="noopener noreferrer">
+      Cámara de Diputados <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.gob.mx/segob" target="_blank" rel="noopener noreferrer">
+      SEGOB <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ============================= -->
+<!--   UNITED KINGDOM (EN‑GB)     -->
+<!-- ============================= -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    United Kingdom · EN‑GB
+  </div>
+
+  <h2>
+    United Kingdom
+    <span class="region-code">EN‑GB</span>
+  </h2>
+
+  <p class="region-meta">
+    UK political news · Westminster, Europe, global affairs · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- Sky News -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Sky News
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCoMdktPbSTixAyNGwb-UYkQ"
+        title="Sky News Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://news.sky.com/" target="_blank" rel="noopener noreferrer">
+          Sky News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- BBC News (clips only) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        BBC News
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLBBCnews"
+        title="BBC News Clips"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.bbc.co.uk/news" target="_blank" rel="noopener noreferrer">
+          BBC News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Channel 4 News -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Channel 4 News
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLChannel4News"
+        title="Channel 4 News Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.channel4.com/news" target="_blank" rel="noopener noreferrer">
+          Channel 4 News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Euronews EN -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Euronews (EN)
+        <span>live / clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCVgO39Bk5sMo66-6o6Spn6Q"
+        title="Euronews EN Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.euronews.com/" target="_blank" rel="noopener noreferrer">
+          Euronews EN · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">UK Political News</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://www.bbc.co.uk/news/politics" target="_self">BBC News · Politics</a>
+      <a href="https://news.sky.com/politics" target="_self">Sky News · Politics</a>
+      <a href="https://www.theguardian.com/politics" target="_self">The Guardian · Politics</a>
+      <a href="https://www.telegraph.co.uk/politics/" target="_self">The Telegraph · Politics</a>
+      <a href="https://www.channel4.com/news/politics" target="_self">Channel 4 News · Politics</a>
+      <a href="https://www.independent.co.uk/news/uk/politics" target="_self">The Independent · Politics</a>
+      <a href="https://www.ft.com/politics" target="_self">Financial Times · Politics</a>
+      <a href="https://www.politico.eu/uk/" target="_self">Politico Europe · UK</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.gov.uk/" target="_blank" rel="noopener noreferrer">
+      UK Government <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.parliament.uk/" target="_blank" rel="noopener noreferrer">
+      UK Parliament <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.bbc.co.uk/news/world" target="_blank" rel="noopener noreferrer">
+      BBC World <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.itv.com/news/politics" target="_blank" rel="noopener noreferrer">
+      ITV News · Politics <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.standard.co.uk/news/politics" target="_blank" rel="noopener noreferrer">
+      Evening Standard · Politics <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ============================= -->
+<!--   ARGENTINA (ES‑AR) SECTION   -->
+<!-- ============================= -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    Argentina · ES‑AR
+  </div>
+
+  <h2>
+    Argentina
+    <span class="region-code">ES‑AR</span>
+  </h2>
+
+  <p class="region-meta">
+    Argentine political news · Casa Rosada, Congreso, national & regional affairs · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- TV Pública Argentina -->
+    <div class="embed-card">
+      <div class="embed-label">
+        TV Pública Argentina
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCR9120YBAqMfntqgRTKmkjQ"
+        title="TV Pública Argentina Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.tvpublica.com.ar/" target="_blank" rel="noopener noreferrer">
+          TV Pública · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- C5N -->
+    <div class="embed-card">
+      <div class="embed-label">
+        C5N
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UC2QXKjvZ2S6a6UQpFf0ziWQ"
+        title="C5N Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.c5n.com/" target="_blank" rel="noopener noreferrer">
+          C5N · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- TN Todo Noticias -->
+    <div class="embed-card">
+      <div class="embed-label">
+        TN · Todo Noticias
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLTNnews"
+        title="TN Todo Noticias Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://tn.com.ar/" target="_blank" rel="noopener noreferrer">
+          TN · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Crónica TV -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Crónica TV
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UC7QYxgDHuZ2J1BGVxJrYj7Q"
+        title="Crónica TV Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.cronica.com.ar/" target="_blank" rel="noopener noreferrer">
+          Crónica · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- IP Noticias -->
+    <div class="embed-card">
+      <div class="embed-label">
+        IP Noticias
+        <span>independent</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCxjzJz0ZqXcXwjkAIXazhqQ"
+        title="IP Noticias Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://ipnoticias.ar/" target="_blank" rel="noopener noreferrer">
+          IP Noticias · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Casa Rosada (Presidencia Argentina) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Casa Rosada
+        <span>gov live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCxjJz0ZqXcXwjkAIXazhqQ"
+        title="Casa Rosada Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.casarosada.gob.ar/" target="_blank" rel="noopener noreferrer">
+          Casa Rosada · Official <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Senado Argentina -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Senado Argentina
+        <span>gov live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCxI0Z0ZqXcXwjkAIXazhqQ"
+        title="Senado Argentina Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.senado.gob.ar/" target="_blank" rel="noopener noreferrer">
+          Senado · Official <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Diputados Argentina -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Cámara de Diputados
+        <span>gov live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCxJ0Z0ZqXcXwjkAIXazhqQ"
+        title="Diputados Argentina Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.hcdn.gob.ar/" target="_blank" rel="noopener noreferrer">
+          Diputados · Official <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">Argentine Political News</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://www.clarin.com/politica/" target="_self">Clarín · Política</a>
+      <a href="https://www.lanacion.com.ar/politica/" target="_self">La Nación · Política</a>
+      <a href="https://www.pagina12.com.ar/secciones/politica" target="_self">Página/12 · Política</a>
+      <a href="https://www.infobae.com/politica/" target="_self">Infobae · Política</a>
+      <a href="https://www.perfil.com/politica/" target="_self">Perfil · Política</a>
+      <a href="https://www.ambito.com/politica" target="_self">Ámbito Financiero · Política</a>
+      <a href="https://www.cronista.com/politica/" target="_self">El Cronista · Política</a>
+      <a href="https://www.telam.com.ar/seccion/politica" target="_self">Télam · Política</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.argentina.gob.ar/" target="_blank" rel="noopener noreferrer">
+      Gobierno de Argentina <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.casarosada.gob.ar/" target="_blank" rel="noopener noreferrer">
+      Presidencia Argentina <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.senado.gob.ar/" target="_blank" rel="noopener noreferrer">
+      Senado de la Nación <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.hcdn.gob.ar/" target="_blank" rel="noopener noreferrer">
+      Cámara de Diputados <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.economia.gob.ar/" target="_blank" rel="noopener noreferrer">
+      Ministerio de Economía <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ============================= -->
+<!--   IRELAND (EN‑IE) SECTION     -->
+<!-- ============================= -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    Ireland · EN‑IE
+  </div>
+
+  <h2>
+    Ireland
+    <span class="region-code">EN‑IE</span>
+  </h2>
+
+  <p class="region-meta">
+    Irish political news · Oireachtas, Government of Ireland, EU affairs · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- Oireachtas TV (Irish Parliament) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Oireachtas TV
+        <span>gov live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCJkWZfFfK8GJpNQ2YlZzE7A"
+        title="Oireachtas TV Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.oireachtas.ie/en/" target="_blank" rel="noopener noreferrer">
+          Oireachtas · Official <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Government of Ireland Press Service -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Government of Ireland
+        <span>press</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLGovIreland"
+        title="Government of Ireland Press Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.gov.ie/en/news/" target="_blank" rel="noopener noreferrer">
+          Gov.ie · News <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- RTÉ News (clips) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        RTÉ News
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLRTENews"
+        title="RTÉ News Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.rte.ie/news/" target="_blank" rel="noopener noreferrer">
+          RTÉ News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Virgin Media News (clips) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Virgin Media News
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLVirginMediaNews"
+        title="Virgin Media News Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.virginmediatelevision.ie/shows/virginmedianews" target="_blank" rel="noopener noreferrer">
+          Virgin Media News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Euronews EN -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Euronews (EN)
+        <span>live / clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCVgO39Bk5sMo66-6o6Spn6Q"
+        title="Euronews EN Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://www.euronews.com/" target="_blank" rel="noopener noreferrer">
+          Euronews EN · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sky News (UK) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Sky News
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCoMdktPbSTixAyNGwb-UYkQ"
+        title="Sky News Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+      <div class="fallback-links">
+        <a class="btn-link" href="https://news.sky.com/" target="_blank" rel="noopener noreferrer">
+          Sky News · Site <span>fallback</span>
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">Irish Political News</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://www.rte.ie/news/politics/" target="_self">RTÉ News · Politics</a>
+      <a href="https://www.irishtimes.com/politics/" target="_self">The Irish Times · Politics</a>
+      <a href="https://www.independent.ie/irish-news/politics/" target="_self">Irish Independent · Politics</a>
+      <a href="https://www.thejournal.ie/politics/" target="_self">TheJournal.ie · Politics</a>
+      <a href="https://www.breakingnews.ie/ireland/" target="_self">BreakingNews.ie · Ireland</a>
+      <a href="https://www.irishexaminer.com/breakingnews/ireland/" target="_self">Irish Examiner · Ireland</a>
+      <a href="https://www.newstalk.com/politics" target="_self">Newstalk · Politics</a>
+      <a href="https://www.bbc.com/news/northern_ireland" target="_self">BBC Northern Ireland</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.gov.ie/en/" target="_blank" rel="noopener noreferrer">
+      Government of Ireland <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.oireachtas.ie/en/" target="_blank" rel="noopener noreferrer">
+      Houses of the Oireachtas <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.president.ie/en" target="_blank" rel="noopener noreferrer">
+      President of Ireland <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.dfa.ie/news-and-media/" target="_blank" rel="noopener noreferrer">
+      Dept. of Foreign Affairs <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.gov.ie/en/press-office/" target="_blank" rel="noopener noreferrer">
+      Gov.ie · Press Office <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ===================================== -->
+<!--   INTERNATIONAL (GLOBAL) SECTION      -->
+<!-- ===================================== -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    International · Global
+  </div>
+
+  <h2>
+    International
+    <span class="region-code">GLOBAL</span>
+  </h2>
+
+  <p class="region-meta">
+    Worldwide political news · Global agencies · International broadcasters · Hybrid embeds + text panels + fallbacks.
+  </p>
+
+  <!-- ========================= -->
+  <!--   EMBEDDABLE VIDEO FEEDS  -->
+  <!-- ========================= -->
+
+  <h3>Global Video Feeds (Embeddable)</h3>
+
+  <div class="embed-grid">
+
+    <!-- Euronews FR -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Euronews (FR)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCFzJjgVicCtFxJ5B0P_ei8A"
+        title="Euronews FR Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Euronews DE -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Euronews (DE)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCW9rF8jLZp8GkVZxJcJ5z2A"
+        title="Euronews DE Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Euronews EN -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Euronews (EN)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCVgO39Bk5sMo66-6o6Spn6Q"
+        title="Euronews EN Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Al Jazeera English -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Al Jazeera English
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg"
+        title="Al Jazeera English Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- TRT World -->
+    <div class="embed-card">
+      <div class="embed-label">
+        TRT World
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UC7fWeaHhqgM4Ry-RMpM2YYw"
+        title="TRT World Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- CNA (Singapore) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        CNA (Singapore)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UC83jt4dlz1Gjl58fzQrrKZg"
+        title="CNA Singapore Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- ABC News Australia -->
+    <div class="embed-card">
+      <div class="embed-label">
+        ABC News Australia
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCGp4u0WHLsK8OAxnvwiTyhA"
+        title="ABC News Australia Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Global News (Canada) -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Global News (CA)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UChLtXXpo4Ge1ReTEboVvTDg"
+        title="Global News Canada Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- AP News -->
+    <div class="embed-card">
+      <div class="embed-label">
+        AP News
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLAPnews"
+        title="AP News Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Reuters -->
+    <div class="embed-card">
+      <div class="embed-label">
+        Reuters
+        <span>clips</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLReuters"
+        title="Reuters Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- France 24 English -->
+    <div class="embed-card">
+      <div class="embed-label">
+        France 24 (EN)
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        title="France 24 English Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- DW English -->
+    <div class="embed-card">
+      <div class="embed-label">
+        DW English
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCknLrEdhRCp1aegoMqRaCZg"
+        title="DW English Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- NBC News NOW -->
+    <div class="embed-card">
+      <div class="embed-label">
+        NBC News NOW
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCeY0bbntWzzVIaj2z3QigXg"
+        title="NBC News NOW Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- CourtTV -->
+    <div class="embed-card">
+      <div class="embed-label">
+        CourtTV
+        <span>live</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/live_stream?channel=UCz8K1QWQwJQ2lG6U5y4Zz4A"
+        title="CourtTV Live"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- CCTV-4 Mirror -->
+    <div class="embed-card">
+      <div class="embed-label">
+        CCTV‑4 (Mirror)
+        <span>intl</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLCCTV4mirror"
+        title="CCTV-4 Mirror Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- KTSM Mirror -->
+    <div class="embed-card">
+      <div class="embed-label">
+        KTSM (Mirror)
+        <span>border</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLKTSMmirror"
+        title="KTSM Mirror Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- KCNC Mirror -->
+    <div class="embed-card">
+      <div class="embed-label">
+        KCNC (Mirror)
+        <span>US local</span>
+      </div>
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLKCNCmirror"
+        title="KCNC Mirror Playlist"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+  </div> <!-- end embed-grid -->
+
+
+  <!-- ========================= -->
+  <!--   TEXTUAL NEWS PANELS     -->
+  <!-- ========================= -->
+
+  <h3>Global Textual News Sources (Expandable)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">International News Panels</span>
+      <span class="summary-region">click to expand</span>
+    </summary>
+
+    <div class="text-links">
+      <a href="https://asia.nikkei.com/" target="_self">Nikkei Asia</a>
+      <a href="https://www.politico.com/" target="_self">Politico US</a>
+      <a href="https://www.politico.eu/" target="_self">Politico EU</a>
+      <a href="https://www.ft.com/world" target="_self">Financial Times · World</a>
+      <a href="https://www.economist.com/" target="_self">The Economist</a>
+      <a href="https://www.reuters.com/world/" target="_self">Reuters · World</a>
+      <a href="https://apnews.com/" target="_self">AP News · World</a>
+      <a href="https://www.bbc.com/news/world" target="_self">BBC World</a>
+      <a href="https://www.aljazeera.com/news/" target="_self">Al Jazeera · World</a>
+      <a href="https://bnonews.com/" target="_self">BNO News</a>
+    </div>
+
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   MSN REGIONAL PANELS     -->
+  <!-- ========================= -->
+
+  <h3>MSN Regional News (Text Panels)</h3>
+
+  <details>
+    <summary>
+      <span class="summary-label">MSN · zh‑CN</span>
+      <span class="summary-region">click</span>
+    </summary>
+    <div class="text-links">
+      <a href="https://www.msn.com/zh-cn" target="_self">MSN China</a>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="summary-label">MSN · es‑MX</span>
+      <span class="summary-region">click</span>
+    </summary>
+    <div class="text-links">
+      <a href="https://www.msn.com/es-mx" target="_self">MSN México</a>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="summary-label">MSN · es‑AR</span>
+      <span class="summary-region">click</span>
+    </summary>
+    <div class="text-links">
+      <a href="https://www.msn.com/es-ar" target="_self">MSN Argentina</a>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="summary-label">MSN · en‑GB</span>
+      <span class="summary-region">click</span>
+    </summary>
+    <div class="text-links">
+      <a href="https://www.msn.com/en-gb" target="_self">MSN UK</a>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="summary-label">MSN · fr‑FR</span>
+      <span class="summary-region">click</span>
+    </summary>
+    <div class="text-links">
+      <a href="https://www.msn.com/fr-fr" target="_self">MSN France</a>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="summary-label">MSN · de‑DE</span>
+      <span class="summary-region">click</span>
+    </summary>
+    <div class="text-links">
+      <a href="https://www.msn.com/de-de" target="_self">MSN Germany</a>
+    </div>
+  </details>
+
+
+  <!-- ========================= -->
+  <!--   FALLBACK BUTTONS        -->
+  <!-- ========================= -->
+
+  <h3>Additional Global Sources (Fallback Buttons)</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.un.org/en/" target="_blank" rel="noopener noreferrer">
+      United Nations <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://webtv.un.org/" target="_blank" rel="noopener noreferrer">
+      UN WebTV <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://ec.europa.eu/" target="_blank" rel="noopener noreferrer">
+      European Commission <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.europarl.europa.eu/" target="_blank" rel="noopener noreferrer">
+      European Parliament <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.whitehouse.gov/live/" target="_blank" rel="noopener noreferrer">
+      White House Live <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.gob.mx/" target="_blank" rel="noopener noreferrer">
+      Gobierno de México <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ===================================== -->
+<!--   PART 10 — ADDITIONAL OFFICIAL SITES -->
+<!--   (NEW SOURCES ONLY — NO DUPLICATES)  -->
+<!-- ===================================== -->
+
+<section>
+  <div class="section-tag">
+    <div class="section-tag-dot"></div>
+    Official Sites · Additional
+  </div>
+
+  <h2>
+    Additional Official Sources
+    <span class="region-code">GOV</span>
+  </h2>
+
+  <p class="region-meta">
+    Global and national government sources not included in earlier sections · fallback buttons only.
+  </p>
+
+  <!-- ========================= -->
+  <!--   GLOBAL OFFICIAL BODIES  -->
+  <!-- ========================= -->
+
+  <h3>Global Institutions</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.nato.int/" target="_blank" rel="noopener noreferrer">
+      NATO · Official <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.osce.org/" target="_blank" rel="noopener noreferrer">
+      OSCE · Official <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.oas.org/" target="_blank" rel="noopener noreferrer">
+      OAS · Organization of American States <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.mercosur.int/" target="_blank" rel="noopener noreferrer">
+      Mercosur · Official <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://au.int/" target="_blank" rel="noopener noreferrer">
+      African Union · Official <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://asean.org/" target="_blank" rel="noopener noreferrer">
+      ASEAN Secretariat <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.worldbank.org/en/news" target="_blank" rel="noopener noreferrer">
+      World Bank · Press <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.imf.org/en/News" target="_blank" rel="noopener noreferrer">
+      IMF · Press <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   UKRAINE — NEW SOURCES   -->
+  <!-- ========================= -->
+
+  <h3>Ukraine · Government & Official News</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.kmu.gov.ua/en" target="_blank" rel="noopener noreferrer">
+      Cabinet of Ministers of Ukraine <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.president.gov.ua/en" target="_blank" rel="noopener noreferrer">
+      President of Ukraine · Official <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.rada.gov.ua/en" target="_blank" rel="noopener noreferrer">
+      Verkhovna Rada (Parliament) <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://mfa.gov.ua/en" target="_blank" rel="noopener noreferrer">
+      Ministry of Foreign Affairs of Ukraine <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.mil.gov.ua/en/" target="_blank" rel="noopener noreferrer">
+      Ministry of Defence of Ukraine <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.ukrinform.net/" target="_blank" rel="noopener noreferrer">
+      Ukrinform · State News Agency <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.ukraine.ua/news/" target="_blank" rel="noopener noreferrer">
+      Ukraine.ua · Official News <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   ARGENTINA — NEW SOURCES -->
+  <!-- ========================= -->
+
+  <h3>Argentina · Additional Ministries</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.argentina.gob.ar/interior" target="_blank" rel="noopener noreferrer">
+      Ministerio del Interior <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.cancilleria.gob.ar/" target="_blank" rel="noopener noreferrer">
+      Cancillería (Foreign Affairs) <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.argentina.gob.ar/seguridad" target="_blank" rel="noopener noreferrer">
+      Ministerio de Seguridad <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   IRELAND — NEW SOURCES   -->
+  <!-- ========================= -->
+
+  <h3>Ireland · Additional Departments</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.gov.ie/en/organisation/department-of-the-taoiseach/" target="_blank" rel="noopener noreferrer">
+      Department of the Taoiseach <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.gov.ie/en/organisation/department-of-finance/" target="_blank" rel="noopener noreferrer">
+      Department of Finance <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.gov.ie/en/organisation/department-of-justice/" target="_blank" rel="noopener noreferrer">
+      Department of Justice <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   MEXICO — NEW SOURCES    -->
+  <!-- ========================= -->
+
+  <h3>Mexico · Additional Ministries</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.gob.mx/sre" target="_blank" rel="noopener noreferrer">
+      Secretaría de Relaciones Exteriores (SRE) <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.gob.mx/shcp" target="_blank" rel="noopener noreferrer">
+      Secretaría de Hacienda y Crédito Público (SHCP) <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   CANADA — NEW SOURCES    -->
+  <!-- ========================= -->
+
+  <h3>Canada · Additional Federal Bodies</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.canada.ca/en/privy-council.html" target="_blank" rel="noopener noreferrer">
+      Privy Council Office <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.elections.ca/" target="_blank" rel="noopener noreferrer">
+      Elections Canada <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   UNITED KINGDOM — NEW    -->
+  <!-- ========================= -->
+
+  <h3>United Kingdom · Additional Offices</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.gov.uk/government/organisations/prime-ministers-office-10-downing-street" target="_blank" rel="noopener noreferrer">
+      Prime Minister’s Office (Number 10) <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.gov.uk/government/organisations/foreign-commonwealth-development-office" target="_blank" rel="noopener noreferrer">
+      Foreign, Commonwealth & Development Office (FCDO) <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   FRANCE — NEW SOURCES    -->
+  <!-- ========================= -->
+
+  <h3>France · Additional Institutions</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.elysee.fr/" target="_blank" rel="noopener noreferrer">
+      Élysée (Présidence de la République) <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.assemblee-nationale.fr/" target="_blank" rel="noopener noreferrer">
+      Assemblée Nationale <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.senat.fr/" target="_blank" rel="noopener noreferrer">
+      Sénat de France <span>open</span>
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!--   GERMANY — NEW SOURCES   -->
+  <!-- ========================= -->
+
+  <h3>Germany · Additional Institutions</h3>
+
+  <div class="fallback-links">
+
+    <a class="btn-link" href="https://www.bundesrat.de/" target="_blank" rel="noopener noreferrer">
+      Bundesrat <span>open</span>
+    </a>
+
+    <a class="btn-link" href="https://www.auswaertiges-amt.de/" target="_blank" rel="noopener noreferrer">
+      Auswärtiges Amt (Foreign Office) <span>open</span>
+    </a>
+
+  </div>
+
+</section>
+
   </main>
 
   <footer>
-    Newsgrid Live MultiAggregation is static by design: hybrid proxy video feeds + direct text sources, no tracking, no algorithmic feed.
+    <div>
+      Newsgrid Live MultiAggregation · Sovereign Multilingual Dashboard
+    </div>
     <div class="hint">
-      Host on GitHub Pages or Cloudflare Pages for HTTPS, then load in Rainmeter (WebView2) or install as a PWA in Edge.
+      All embeds use publicly available streams · Text panels load directly in‑page · Fallback links open official sites.
     </div>
   </footer>
+
 </body>
 </html>
+
