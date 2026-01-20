@@ -60,3 +60,16 @@
     "official": "https://www.univision.com/local/el-paso-kint"
   }
 }
+
+{
+  "canal44": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=UCp8i1Cdm42Hcps225y7sYbw",
+    "piped": "https://piped.video/embed/live/UCp8i1Cdm42Hcps225y7sYbw",
+    "invidious": "https://inv.nadeko.net/embed/live_stream?channel=UCp8i1Cdm42Hcps225y7sYbw"
+  },
+  "examplenews": {
+    "youtube": "https://www.youtube.com/embed/live_stream?channel=XXXXXXXXXXXXXXX",
+    "piped": "https://piped.video/embed/live/XXXXXXXXXXXXXXX",
+    "invidious": "https://inv.nadeko.net/embed/live_stream?channel=XXXXXXXXXXXXXXX"
+  }
+}

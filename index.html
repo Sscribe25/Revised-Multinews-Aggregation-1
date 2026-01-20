@@ -2435,6 +2435,138 @@ loadFallbackRegistry().then((registry) => {
 });
 </script>
 
+<script>
+// 1. Make all fallback buttons open in the same window
+document.querySelectorAll("a.btn-link").forEach((a) => {
+  a.removeAttribute("target");
+  a.removeAttribute("rel");
+});
+
+// 2. Auto-assign data-id to iframes that don't have one (best-effort host-based)
+document.querySelectorAll("iframe").forEach((frame) => {
+  if (!frame.dataset.id) {
+    try {
+      const url = new URL(frame.src);
+      const host = url.hostname.replace("www.", "");
+      const id = host.split(".")[0];
+      frame.dataset.id = id;
+    } catch (e) {}
+  }
+});
+
+// 3. Load fallback registry
+async function loadFallbackRegistry() {
+  const response = await fetch("./fallbacks.json");
+  return response.json();
+}
+
+// 4. Core 3-tier fallback logic: YouTube -> Piped -> Invidious -> Official site
+loadFallbackRegistry().then((registry) => {
+  document.querySelectorAll("iframe[data-id]").forEach((frame) => {
+    const id = frame.dataset.id;
+    const entry = registry[id];
+    if (!entry) return;
+
+    const parent = frame.closest(".embed-card");
+    if (!parent) return;
+
+    // Track which tier we're on: "youtube" -> "piped" -> "invidious"
+    let currentTier = "youtube";
+
+    // Helper: apply a given tier URL if available
+    function applyTier(tier) {
+      const url = entry[tier];
+      if (!url) return false;
+      currentTier = tier;
+      frame.src = url;
+      return true;
+    }
+
+    // Helper: show official-site fallback buttons
+    function showOfficialFallback() {
+      frame.style.display = "none";
+      const fallback = parent.querySelector(".fallback-links");
+      if (fallback) fallback.style.display = "flex";
+    }
+
+    // Helper: advance to the next tier or official site
+    function advanceTier() {
+      if (currentTier === "youtube") {
+        // Try Piped
+        if (applyTier("piped")) {
+          startTierWatchdog();
+          return;
+        }
+        // If no Piped, go straight to Invidious
+        currentTier = "piped"; // mark as passed
+      }
+
+      if (currentTier === "piped") {
+        // Try Invidious
+        if (applyTier("invidious")) {
+          startTierWatchdog();
+          return;
+        }
+        currentTier = "invidious"; // mark as passed
+      }
+
+      // All tiers exhausted -> official site
+      showOfficialFallback();
+    }
+
+    let watchdogTimeout = null;
+
+    // Helper: start a timeout-based watchdog for the current tier
+    function startTierWatchdog() {
+      if (watchdogTimeout) clearTimeout(watchdogTimeout);
+
+      watchdogTimeout = setTimeout(() => {
+        // If the iframe is still effectively blank, advance tier
+        try {
+          const doc = frame.contentDocument;
+          const body = doc && doc.body;
+          const isBlank =
+            !doc ||
+            !body ||
+            !body.innerHTML ||
+            body.innerHTML.trim() === "" ||
+            body.children.length === 0;
+
+          if (isBlank) {
+            advanceTier();
+          }
+        } catch (e) {
+          // Cross-origin access may fail; still advance tier on timeout
+          advanceTier();
+        }
+      }, 5000); // 5 seconds per tier; adjust if needed
+    }
+
+    // Cancel watchdog when something actually loads
+    frame.addEventListener("load", () => {
+      if (watchdogTimeout) {
+        clearTimeout(watchdogTimeout);
+        watchdogTimeout = null;
+      }
+    });
+
+    // Initial tier: ensure we start from YouTube if defined, else Piped, else Invidious
+    if (!applyTier("youtube")) {
+      if (!applyTier("piped")) {
+        if (!applyTier("invidious")) {
+          // No usable tiers at all -> official site
+          showOfficialFallback();
+          return;
+        }
+      }
+    }
+
+    // Start watchdog for the initial tier
+    startTierWatchdog();
+  });
+});
+</script>
+
 </body>
 </html>
 
