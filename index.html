@@ -2373,108 +2373,13 @@
   </footer>
 
 <script>
-document.querySelectorAll("iframe").forEach((frame) => {
-  const originalSrc = frame.src;
-
-  // Only apply to non‑YouTube embeds
-  if (!originalSrc.includes("youtube.com")) {
-    frame.addEventListener("error", () => {
-      const parent = frame.closest(".embed-card");
-
-      // Look for a YouTube fallback stored in data-youtube
-      const yt = frame.dataset.youtube;
-
-      if (yt) {
-        frame.src = yt;
-      } else {
-        // If no YouTube fallback, collapse the iframe
-        frame.style.display = "none";
-
-        // Show fallback links if they exist
-        const fallback = parent.querySelector(".fallback-links");
-        if (fallback) fallback.style.display = "flex";
-      }
-    });
-  }
-});
-</script>
-
-<script>
-document.querySelectorAll("iframe").forEach((frame) => {
-  const originalSrc = frame.src;
-
-  // Only apply to non‑YouTube embeds
-  if (!originalSrc.includes("youtube.com")) {
-    frame.addEventListener("error", () => {
-      const parent = frame.closest(".embed-card");
-
-      // If a mirror is defined, use it
-      const mirror = frame.dataset.mirror;
-      if (mirror) {
-        frame.src = mirror;
-        return;
-      }
-
-      // Otherwise fallback to YouTube auto-switch logic
-      const yt = frame.dataset.youtube;
-      if (yt) {
-        frame.src = yt;
-        return;
-      }
-
-      // Otherwise hide iframe and show fallback links
-      frame.style.display = "none";
-      const fallback = parent.querySelector(".fallback-links");
-      if (fallback) fallback.style.display = "flex";
-    });
-  }
-});
-</script>
-
-<script>
-async function loadFallbackRegistry() {
-  const response = await fetch("./fallbacks.json");
-  return response.json();
-}
-
-loadFallbackRegistry().then((registry) => {
-  document.querySelectorAll("iframe[data-id]").forEach((frame) => {
-    const id = frame.dataset.id;
-    const entry = registry[id];
-    if (!entry) return;
-
-    const parent = frame.closest(".embed-card");
-
-    frame.addEventListener("error", () => {
-      // 1. Try mirror
-      if (entry.mirror) {
-        frame.src = entry.mirror;
-        return;
-      }
-
-      // 2. Try YouTube
-      if (entry.youtube) {
-        frame.src = entry.youtube;
-        return;
-      }
-
-      // 3. Show fallback buttons
-      frame.style.display = "none";
-      const fallback = parent.querySelector(".fallback-links");
-      if (fallback) fallback.style.display = "flex";
-    });
-  });
-});
-</script>
-
-<script>
+// 1. Make all fallback buttons open in the same window
 document.querySelectorAll("a.btn-link").forEach((a) => {
-  if (a.hasAttribute("target")) a.removeAttribute("target");
-  if (a.hasAttribute("rel")) a.removeAttribute("rel");
+  a.removeAttribute("target");
+  a.removeAttribute("rel");
 });
-</script>
 
-<script>
+// 2. Auto‑assign data-id to every iframe
 document.querySelectorAll("iframe").forEach((frame) => {
   if (!frame.dataset.id) {
     try {
@@ -2485,9 +2390,8 @@ document.querySelectorAll("iframe").forEach((frame) => {
     } catch (e) {}
   }
 });
-</script>
 
-<script>
+// 3. Load fallback registry and apply timeout-based fallback logic
 async function loadFallbackRegistry() {
   const response = await fetch("./fallbacks.json");
   return response.json();
@@ -2501,7 +2405,9 @@ loadFallbackRegistry().then((registry) => {
 
     const parent = frame.closest(".embed-card");
 
-    frame.addEventListener("error", () => {
+    // Timeout-based detection (works for YouTube live streams)
+    const timeout = setTimeout(() => {
+
       // 1. Mirror fallback
       if (entry.mirror) {
         frame.src = entry.mirror;
@@ -2518,6 +2424,12 @@ loadFallbackRegistry().then((registry) => {
       frame.style.display = "none";
       const fallback = parent.querySelector(".fallback-links");
       if (fallback) fallback.style.display = "flex";
+
+    }, 4000); // 4 seconds
+
+    // Cancel timeout if iframe loads successfully
+    frame.addEventListener("load", () => {
+      clearTimeout(timeout);
     });
   });
 });
